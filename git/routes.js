@@ -21,14 +21,33 @@ router.get("/", function (req, res) {
         obj.deletions += value.deletions;
       });
       return obj;
+    },
+    out: {
+      replace: 'PersonReduce'
     }
   };
 
-  db.Commit.mapReduce(o, function (err, results) {
+  db.Commit.mapReduce(o, function (err, model) {
     if (err) {
       res.send(err);
     } else {
-      res.send(results);
+      model.find().populate({
+        path: "_id",
+        model: "Person"
+      }).exec(function (err, results) {
+        if (err) {
+          res.send(err);
+        } else {
+          var data = results.map(function (result) {
+            return {
+              author: result._id.name,
+              additions: result.value.additions,
+              deletions: result.value.deletions
+            };
+          });
+          res.send(data);
+        }
+      });
     }
   });
 });
