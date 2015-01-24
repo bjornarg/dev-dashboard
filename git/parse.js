@@ -62,9 +62,9 @@ function getCommitStats(commit, branches) {
           patch.hunks().forEach(function (hunk) {
             hunk.lines().forEach(function (line) {
               if (PLUS === line.origin()) {
-                file.additions++;
-              } else if (MINUS === line.origin()) {
                 file.deletions++;
+              } else if (MINUS === line.origin()) {
+                file.additions++;
               }
             });
           });
