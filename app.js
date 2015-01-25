@@ -22,14 +22,17 @@ app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use("/", express.static(path.join(__dirname, "public")));
 
 if ("git" in config) {
   var git = require("./git");
+  var startTime = new Date().getTime();
   git.parse(config.git.repository.path).then(function (stats) {
-    git.db.Commit.saveCommits(stats);
+    git.db.Commit.saveCommits(stats).then(function () {
+      console.log("Finished indexing in ", new Date().getTime()-startTime, "milliseconds");
+    });
   }).catch(function (err) {
-    logger.error(err);
+    console.log(err);
   });
   app.use("/git", git.routes);
 }
