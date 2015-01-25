@@ -17,7 +17,7 @@ var titleElement;
 
 function getStats(filters) {
   var filter = {start: filters[1]};
-  return $.get("/git/authors", filter);
+  return $.get("/git/commit-stats", filter);
 }
 
 function setTitle(filters) {
