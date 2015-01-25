@@ -1,6 +1,9 @@
 var router = require("express").Router();
 var db = require("./db");
 
+/** Gets total additions/deletions made grouped by author.
+ *
+ */
 router.get("/commit-stats", function (req, res) {
   var start = new Date(1971, 0, 1);
   if (req.query.start) {
@@ -50,6 +53,36 @@ router.get("/commit-stats", function (req, res) {
               author: result._id.name,
               additions: result.value.additions,
               deletions: result.value.deletions
+            };
+          });
+          res.send(data);
+        }
+      });
+    }
+  });
+});
+
+/** Gets the commit count grouped by author.
+ *
+ */
+router.get("/commit-count", function (req, res) {
+  db.Commit.aggregate({$group:
+    {
+      _id: "$author",
+      total: {$sum: 1}
+    }
+  }, function (err, commits) {
+    if (err) {
+      res.send(err);
+    } else {
+      db.Person.populate(commits, {path: "_id"}, function (err, authors) {
+        if (err) {
+          res.send(err);
+        } else {
+          var data = authors.map(function (author) {
+            return {
+              author: author._id.name,
+              total: author.total
             };
           });
           res.send(data);
