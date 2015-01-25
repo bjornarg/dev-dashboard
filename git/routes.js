@@ -1,7 +1,7 @@
 var router = require("express").Router();
 var db = require("./db");
 
-router.get("/", function (req, res) {
+router.get("/authors", function (req, res) {
   var start = new Date(1971, 0, 1);
   if (req.query.start) {
     start = new Date(req.query.start);
