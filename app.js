@@ -27,9 +27,14 @@ app.use("/", express.static(path.join(__dirname, "public")));
 if ("git" in config) {
   var git = require("./git");
   var startTime = new Date().getTime();
+  console.log("Starting...");
   git.parse(config.git.repository.path).then(function (stats) {
+    console.log("Parsed directory in ", new Date().getTime()-startTime, "milliseconds");
+    startTime = new Date();
     git.db.Commit.saveCommits(stats).then(function () {
-      console.log("Finished indexing in ", new Date().getTime()-startTime, "milliseconds");
+      console.log("Saved index in ", new Date().getTime()-startTime, "milliseconds");
+    }).catch(function (err) {
+      console.log("Issues saving index: ", err);
     });
   }).catch(function (err) {
     console.log(err);

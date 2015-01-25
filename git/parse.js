@@ -23,6 +23,8 @@ function branchCommits(repository, branch) {
       return commitHistory(commit);
     }).then(function (commits) {
       resolve({branch: branch, commits: commits});
+    }).catch(function (err) {
+      reject(err);
     });
   });
 }
@@ -106,7 +108,9 @@ function indexRepository(path) {
     var promises = [];
 
     reflist.forEach(function (ref) {
-      promises.push(branchCommits(repository, ref));
+      if (ref.isBranch()) {
+        promises.push(branchCommits(repository, ref));
+      }
     });
 
     return Promise.all(promises);

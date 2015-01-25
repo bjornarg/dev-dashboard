@@ -52,11 +52,11 @@ commitSchema.statics.saveCommits = function (commits) {
     promises.push(new Promise(function (resolve, reject) {
       Person.findOneAndUpdate(
         {$or: [{email: commit.author.email}, {name: commit.author.name}]},
-        {email: commit.author.email, name: commit.author.name},
+        {$push: {email: commit.author.email}, name: commit.author.name},
         {upsert: true},
         function (err, author) {
           if (err) {
-            throw new Error(err);
+            return reject(err);
           }
           schema.findOneAndUpdate(
             {sha: commit.sha},
@@ -72,7 +72,7 @@ commitSchema.statics.saveCommits = function (commits) {
             {upsert: true},
             function (err, data) {
               if (err) {
-                throw new Error(err);
+                return reject(err);
               }
               resolve();
             }
