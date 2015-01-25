@@ -53,7 +53,7 @@ function initialize(ctx) {
       ]
     };
     chart = new Chart(ctx).Bar(datasets, {
-      barShowStroke: false
+      responsive: true
     });
     setTitle(filters[0]);
     setTimeout(update, ROTATION_DELAY);
