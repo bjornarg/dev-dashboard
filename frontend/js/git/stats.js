@@ -14,6 +14,7 @@ var chart;
 var filterIdx = 1;
 var ROTATION_DELAY = 5000;
 var titleElement;
+var timer = 0;
 
 function getStats(filters) {
   var filter = {start: filters[1]};
@@ -56,7 +57,7 @@ function initialize(ctx) {
       responsive: true
     });
     setTitle(filters[0]);
-    setTimeout(update, ROTATION_DELAY);
+    timer = setTimeout(update, ROTATION_DELAY);
   });
 }
 
@@ -83,11 +84,21 @@ function update() {
     setTitle(filters[filterIdx]);
     chart.update();
     filterIdx = (filterIdx+1) % filters.length;
-    setTimeout(update, ROTATION_DELAY);
+    timer = setTimeout(update, ROTATION_DELAY);
   });
+}
+
+function visibilityChanged() {
+  if (timer) {
+    clearTimeout(timer);
+  }
+  if (!document.hidden) {
+    timer = setTimeout(update, ROTATION_DELAY);
+  }
 }
 
 module.exports = function (title, ctx) {
   titleElement = title;
   initialize(ctx.getContext("2d"));
+  document.addEventListener("visibilitychange", visibilityChanged);
 };
