@@ -2,9 +2,13 @@ var router = require("express").Router();
 var db = require("./db");
 
 router.get("/", function (req, res) {
+  var start = new Date(1971, 0, 1);
+  if (req.query.start) {
+    start = new Date(req.query.start);
+  }
   var o = {
     map: function () {
-      if (this.parents.length === 1) {
+      if (this.parents.length === 1 && this.date >= start) {
         for (var i = 0; i < this.files.length; i++) {
           emit(this.author,
             {
@@ -24,6 +28,9 @@ router.get("/", function (req, res) {
     },
     out: {
       replace: 'PersonReduce'
+    },
+    scope: {
+      start: start
     }
   };
 
