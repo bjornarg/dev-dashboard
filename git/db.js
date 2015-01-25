@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var personSchema = new mongoose.Schema({
-  name: String,
+  name: {type: String, index: true},
   email: {type: [String], index: true, unique: true}
 });
 
@@ -51,7 +51,7 @@ commitSchema.statics.saveCommits = function (commits) {
   commits.forEach(function (commit) {
     promises.push(new Promise(function (resolve, reject) {
       Person.findOneAndUpdate(
-        {email: commit.author.email},
+        {$or: [{email: commit.author.email}, {name: commit.author.name}]},
         {email: commit.author.email, name: commit.author.name},
         {upsert: true},
         function (err, author) {
