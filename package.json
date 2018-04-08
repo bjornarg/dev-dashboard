@@ -10,19 +10,19 @@
     "build:styles": "lessc frontend/less/main.less --source-map public/css/main.css"
   },
   "dependencies": {
-    "body-parser": "~1.8.1",
-    "bootstrap": "^3.3.2",
-    "chart.js": "^1.0.1",
-    "cookie-parser": "~1.3.3",
-    "debug": "~2.0.0",
-    "express": "~4.9.0",
-    "jade": "~1.6.0",
-    "jquery": "^2.1.3",
-    "moment": "^2.9.0",
-    "mongoose": "^3.8.21",
-    "morgan": "~1.3.0",
+    "body-parser": "^1.18.2",
+    "bootstrap": "^3.3.7",
+    "chart.js": "^1.1.1",
+    "cookie-parser": "^1.4.3",
+    "debug": "^2.6.9",
+    "express": "^4.16.3",
+    "jade": "^1.11.0",
+    "jquery": "^3.3.1",
+    "moment": "^2.22.0",
+    "mongoose": "^3.9.7",
+    "morgan": "^1.9.0",
     "nodegit": "^0.2.7",
     "promise": "^6.1.0",
-    "serve-favicon": "~2.1.3"
+    "serve-favicon": "^2.5.0"
   }
 }
